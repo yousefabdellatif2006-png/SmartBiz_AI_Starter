@@ -948,7 +948,7 @@ def server_error(_error):
 
 
 if __name__ == "__main__":
-    app.run(debug=os.getenv("FLASK_DEBUG", "1") == "1", host="127.0.0.1", port=5000)
+    app.run(debug=False, use_reloader=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 @app.route("/expenses/<int:expense_id>/delete", methods=["POST"])
 @login_required
 def expense_delete(expense_id):
