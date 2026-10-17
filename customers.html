@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}العملاء | SmartBiz AI{% endblock %}
+{% block page_heading %}إدارة العملاء{% endblock %}
+{% block breadcrumb %}العملاء{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>قاعدة بيانات العملاء</h2><p>احفظ بيانات العملاء واربطهم بفواتير البيع لتتبع سجل مشترياتهم.</p></div><a class="btn btn-primary" href="{{ url_for('customer_new') }}">＋ إضافة عميل</a></div>
+<div class="panel">
+  <div class="table-toolbar"><form class="search-form" method="get"><input type="search" name="q" value="{{ search }}" placeholder="ابحث باسم العميل أو الهاتف أو البريد الإلكتروني"><button class="btn btn-outline" type="submit">بحث</button>{% if search %}<a class="clear-search" href="{{ url_for('customers') }}">مسح</a>{% endif %}</form><span class="muted">عدد العملاء: {{ customers|length }}</span></div>
+  {% if customers %}<div class="table-wrap"><table><thead><tr><th>العميل</th><th>الهاتف</th><th>البريد الإلكتروني</th><th>عدد المشتريات</th><th>إجمالي المشتريات</th><th>الإجراءات</th></tr></thead><tbody>
+  {% for c in customers %}<tr><td><strong>{{ c.name }}</strong>{% if c.address %}<small class="table-sub">{{ c.address }}</small>{% endif %}</td><td>{{ c.phone or '—' }}</td><td>{{ c.email or '—' }}</td><td>{{ c.orders_count }}</td><td class="strong-cell">{{ c.total_spent|money }}</td><td><a class="action-link" href="{{ url_for('customer_edit', customer_id=c.id) }}">تعديل</a></td></tr>{% endfor %}
+  </tbody></table></div>{% else %}<div class="empty-state"><span>♙</span><h4>لا يوجد عملاء مسجلون</h4><p>أضف عميلًا لربطه بفواتير البيع ومتابعة مشترياته.</p><a class="btn btn-primary" href="{{ url_for('customer_new') }}">إضافة أول عميل</a></div>{% endif %}
+</div>
+{% endblock %}

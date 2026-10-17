@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}المشتريات | SmartBiz AI{% endblock %}
+{% block page_heading %}المشتريات وتوريد المخزون{% endblock %}
+{% block breadcrumb %}المشتريات{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>سجل فواتير الشراء</h2><p>كل فاتورة شراء مكتملة تزيد المخزون وتحدّث متوسط تكلفة المنتج المسجلة.</p></div><a class="btn btn-primary" href="{{ url_for('purchase_new') }}">＋ تسجيل فاتورة شراء</a></div>
+<div class="panel">
+{% if purchases %}<div class="table-wrap"><table><thead><tr><th>رقم الفاتورة</th><th>المورد</th><th>التاريخ</th><th>عدد القطع</th><th>الإجمالي</th><th>الحالة</th></tr></thead><tbody>{% for p in purchases %}<tr><td><span class="invoice-ref">{{ p.purchase_number }}</span></td><td>{{ p.supplier }}</td><td>{{ p.created_at|date_ar }}</td><td>{{ p.total_units }}</td><td class="strong-cell">{{ p.total_amount|money }}</td><td><span class="status-pill {{ 'completed' if p.status == 'received' else 'cancelled' }}">{{ 'تم الاستلام' if p.status == 'received' else 'ملغاة' }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><span>▧</span><h4>لا توجد فواتير شراء</h4><p>سجّل أول فاتورة شراء، وستُضاف الكميات تلقائيًا إلى المخزون.</p><a class="btn btn-primary" href="{{ url_for('purchase_new') }}">تسجيل فاتورة شراء</a></div>{% endif %}
+</div>
+{% endblock %}

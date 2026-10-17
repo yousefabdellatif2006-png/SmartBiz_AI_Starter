@@ -1,0 +1,13 @@
+SmartBiz AI - ابدأ من هنا
+
+1) استورد init_db.sql في phpMyAdmin.
+2) افتح مجلد المشروع في VS Code.
+3) انسخ .env.example إلى ملف جديد اسمه .env.
+4) نفذ: py -m venv .venv
+5) نفذ: .\.venv\Scripts\Activate.ps1
+6) نفذ: pip install -r requirements.txt
+7) نفذ: python create_admin.py
+8) نفذ: python app.py
+9) افتح: http://127.0.0.1:5000
+
+الشرح الكامل باللغة العربية موجود في README_AR.md.

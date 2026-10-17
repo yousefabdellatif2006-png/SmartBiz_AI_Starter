@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}فاتورة شراء جديدة | SmartBiz AI{% endblock %}
+{% block page_heading %}فاتورة شراء جديدة{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('purchases') }}">المشتريات</a> / فاتورة جديدة{% endblock %}
+{% block content %}
+<div class="form-page-heading"><a class="back-link" href="{{ url_for('purchases') }}">→ الرجوع إلى المشتريات</a><p>سجّل البضاعة المستلمة؛ سيزيد المخزون بعد الحفظ داخل معاملة واحدة.</p></div>
+<form method="post" class="purchase-layout" id="purchase-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><section class="panel">
+<div class="form-grid purchase-meta"><label>المورد المسجل<select name="supplier_id"><option value="">بدون اختيار مورد</option>{% for s in suppliers %}<option value="{{ s.id }}" {% if form.get('supplier_id')|string == s.id|string %}selected{% endif %}>{{ s.name }}{% if s.phone %} — {{ s.phone }}{% endif %}</option>{% endfor %}</select></label><label>اسم مورد غير مسجل (اختياري)<input name="supplier_name" maxlength="180" value="{{ form.get('supplier_name','') }}" placeholder="يُحفظ الاسم على الفاتورة فقط"></label></div>
+<div class="panel-heading purchase-heading"><div><h3>أصناف فاتورة الشراء</h3><p>اختر المنتجات والكمية وتكلفة الوحدة</p></div><span class="chip">تحديث تلقائي للمخزون</span></div>
+<div id="purchase-items" class="purchase-items"><div class="purchase-line"><label>المنتج<select name="product_id[]" class="purchase-product" required><option value="">اختر المنتج</option>{% for p in products %}<option value="{{ p.id }}" data-cost="{{ p.buy_price }}" data-stock="{{ p.stock }}">{{ p.name }} — المخزون {{ p.stock }}</option>{% endfor %}</select></label><label>الكمية<input name="quantity[]" class="purchase-quantity" type="number" min="1" step="1" value="1" required></label><label>تكلفة الوحدة (ج.م)<input name="unit_cost[]" class="purchase-cost" type="number" min="0" step="0.01" value="0.00" required></label><div class="purchase-line-total"><small>إجمالي السطر</small><strong>0.00 ج.م</strong></div><button class="remove-line" type="button" title="حذف السطر" aria-label="حذف السطر">×</button></div></div>
+<button type="button" class="btn btn-outline add-line-btn" id="add-purchase-line">＋ إضافة صنف آخر</button>
+{% if not products %}<div class="notice-box">لا توجد منتجات. أضف المنتجات أولًا من صفحة المنتجات والمخزون.</div>{% endif %}
+<div class="purchase-summary"><span>الإجمالي التقديري للفاتورة</span><strong id="purchase-grand-total">0.00 ج.م</strong></div>
+<div class="form-actions"><a class="btn btn-outline" href="{{ url_for('purchases') }}">إلغاء</a><button class="btn btn-primary" type="submit" {% if not products %}disabled{% endif %}>حفظ فاتورة الشراء ←</button></div>
+</section></form>
+<template id="purchase-line-template"><div class="purchase-line"><label>المنتج<select name="product_id[]" class="purchase-product" required><option value="">اختر المنتج</option>{% for p in products %}<option value="{{ p.id }}" data-cost="{{ p.buy_price }}" data-stock="{{ p.stock }}">{{ p.name }} — المخزون {{ p.stock }}</option>{% endfor %}</select></label><label>الكمية<input name="quantity[]" class="purchase-quantity" type="number" min="1" step="1" value="1" required></label><label>تكلفة الوحدة (ج.م)<input name="unit_cost[]" class="purchase-cost" type="number" min="0" step="0.01" value="0.00" required></label><div class="purchase-line-total"><small>إجمالي السطر</small><strong>0.00 ج.م</strong></div><button class="remove-line" type="button" title="حذف السطر" aria-label="حذف السطر">×</button></div></template>
+{% endblock %}
+{% block scripts %}<script>
+(function(){
+ const form=document.getElementById('purchase-form'), items=document.getElementById('purchase-items'), template=document.getElementById('purchase-line-template'), add=document.getElementById('add-purchase-line');
+ if(!form||!items||!template||!add)return;
+ const fmt=n=>`${Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} ج.م`;
+ function recalc(){let total=0;items.querySelectorAll('.purchase-line').forEach(line=>{const qty=Number.parseInt(line.querySelector('.purchase-quantity').value||'0',10)||0;const cost=Number(line.querySelector('.purchase-cost').value||'0')||0;const sub=qty*cost;total+=sub;line.querySelector('.purchase-line-total strong').textContent=fmt(sub);});document.getElementById('purchase-grand-total').textContent=fmt(total);}
+ function bind(line){const select=line.querySelector('.purchase-product');select.addEventListener('change',()=>{const opt=select.options[select.selectedIndex];if(opt&&opt.dataset.cost!==undefined)line.querySelector('.purchase-cost').value=Number(opt.dataset.cost||0).toFixed(2);recalc();});line.querySelector('.purchase-quantity').addEventListener('input',recalc);line.querySelector('.purchase-cost').addEventListener('input',recalc);line.querySelector('.remove-line').addEventListener('click',()=>{if(items.querySelectorAll('.purchase-line').length===1){select.value='';line.querySelector('.purchase-quantity').value='1';line.querySelector('.purchase-cost').value='0.00';}else line.remove();recalc();});}
+ items.querySelectorAll('.purchase-line').forEach(bind);add.addEventListener('click',()=>{items.appendChild(template.content.cloneNode(true));bind(items.lastElementChild);recalc();});form.addEventListener('submit',e=>{if(![...items.querySelectorAll('.purchase-line')].some(l=>l.querySelector('.purchase-product').value)){e.preventDefault();alert('اختار منتجًا واحدًا على الأقل.');}});recalc();
+})();
+</script>{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}التقارير | SmartBiz AI{% endblock %}
+{% block page_heading %}التقارير والتحليلات{% endblock %}
+{% block breadcrumb %}التقارير{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>تقرير المبيعات والأرباح</h2><p>اختر الفترة لمراجعة الأداء والمنتجات الأعلى مبيعًا.</p></div><button class="btn btn-outline" type="button" onclick="window.print()">طباعة التقرير</button></div>
+<form class="panel date-filter" method="get"><label>من تاريخ<input type="date" name="start" value="{{ start }}" required></label><label>إلى تاريخ<input type="date" name="end" value="{{ end }}" required></label><button class="btn btn-primary" type="submit">عرض التقرير</button></form>
+<div class="metric-grid report-metrics"><article class="metric-card"><div class="metric-top"><span>إجمالي المبيعات</span><span class="metric-icon indigo">↗</span></div><div class="metric-value">{{ summary.sales_total|money }}</div><div class="metric-foot"><span class="metric-sub">{{ summary.orders_count }} فاتورة مكتملة</span></div></article><article class="metric-card"><div class="metric-top"><span>تكلفة المنتجات</span><span class="metric-icon amber">▤</span></div><div class="metric-value">{{ summary.cost_total|money }}</div><div class="metric-foot"><span class="metric-sub">تكلفة البضاعة المباعة</span></div></article><article class="metric-card"><div class="metric-top"><span>مجمل الربح</span><span class="metric-icon green">⌁</span></div><div class="metric-value">{{ summary.gross_profit|money }}</div><div class="metric-foot"><span class="metric-sub">المبيعات ناقص التكلفة المسجلة</span></div></article><article class="metric-card"><div class="metric-top"><span>صافي الربح التقديري</span><span class="metric-icon blue">◈</span></div><div class="metric-value">{{ summary.net_profit|money }}</div><div class="metric-foot"><span class="metric-sub">بعد طرح المصروفات المسجلة</span></div></article></div>
+<div class="content-grid report-grid"><section class="panel"><div class="panel-heading simple"><div><h3>المبيعات حسب اليوم</h3><p>خلال الفترة المحددة</p></div></div>{% if daily %}<div class="chart-box"><canvas id="sales-chart"></canvas></div>{% else %}<div class="empty-inline">لا توجد مبيعات في الفترة المحددة.</div>{% endif %}</section><section class="panel"><div class="panel-heading simple"><div><h3>المنتجات الأعلى إيرادًا</h3><p>حسب قيمة المبيعات المسجلة</p></div></div>{% if best_products %}<div class="table-wrap"><table><thead><tr><th>المنتج</th><th>القطع</th><th>الإيراد</th></tr></thead><tbody>{% for p in best_products %}<tr><td>{{ p.name }}</td><td>{{ p.units }}</td><td class="strong-cell">{{ p.revenue|money }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-inline">لا توجد بيانات كافية لعرض المنتجات الأعلى إيرادًا.</div>{% endif %}</section></div>
+{% endblock %}
+{% block scripts %}{% if daily %}<script>
+const salesDays = {{ daily|map(attribute='day')|map('string')|list|tojson }};
+const salesValues = {{ daily|map(attribute='sales')|map('float')|list|tojson }};
+const chartElement = document.getElementById('sales-chart');
+if (chartElement && window.Chart) new Chart(chartElement, {type:'line', data:{labels:salesDays,datasets:[{label:'المبيعات بالجنيه',data:salesValues,tension:.3,fill:true,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+</script>{% endif %}{% endblock %}

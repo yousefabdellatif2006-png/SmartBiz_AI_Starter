@@ -1,0 +1,19 @@
+SmartBiz AI — ابدأ هنا
+
+1) شغّل Apache وMySQL من XAMPP.
+2) قاعدة البيانات smartbiz_ai والجداول سبق إنشاؤها. لا تستورد init_db.sql مرة أخرى إذا كانت الجداول ظاهرة في phpMyAdmin.
+3) افتح مجلد smartbiz_ai في VS Code ثم Terminal > New Terminal.
+4) إذا كان مجلد .venv موجودًا في المجلد الأب SmartBiz_AI_Starter، ثبّت المكتبات هكذا:
+   ..\.venv\Scripts\python.exe -m pip install -r requirements.txt
+   إذا لم توجد البيئة أصلًا:
+   py -m venv ..\.venv
+   ..\.venv\Scripts\python.exe -m pip install -r requirements.txt
+5) إذا لم تنشئ ملف .env من قبل، انسخ .env.example إلى ملف جديد اسمه .env بجوار app.py.
+6) إنشاء حساب المدير:
+   ..\.venv\Scripts\python.exe create_admin.py
+   أدخل اسم المستخدم والاسم الظاهر وكلمة مرور من 8 أحرف على الأقل. احفظ اسم المستخدم وكلمة المرور لأنهما بيانات تسجيل الدخول.
+7) تشغيل النظام:
+   ..\.venv\Scripts\python.exe app.py
+8) افتح http://127.0.0.1:5000 وسجّل الدخول.
+
+لا تشارك ملف .env أو كلمات المرور. النسخة محلية للتجربة؛ لا تنشرها للعامة قبل إعداد HTTPS ومفتاح SECRET_KEY آمن وإيقاف debug وتأمين قاعدة البيانات.

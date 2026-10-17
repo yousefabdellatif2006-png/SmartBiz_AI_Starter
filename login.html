@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}تسجيل الدخول | SmartBiz AI{% endblock %}
+{% block auth_content %}
+<div class="login-layout">
+  <section class="login-visual"><div class="visual-orb orb-one"></div><div class="visual-orb orb-two"></div><div class="visual-content"><div class="logo-large">S</div><div class="eyebrow">SMART BUSINESS MANAGEMENT</div><h1>إدارة أذكى.<br><span>قرارات أوضح.</span></h1><p>تابع المبيعات والمخزون وأداء شركتك من لوحة واحدة.</p><div class="visual-stats"><div><strong>360°</strong><small>رؤية أوضح للشركة</small></div><div><strong>Live</strong><small>متابعة عملياتك</small></div></div></div><div class="visual-footer">SMARTBIZ AI · COMPANY MANAGEMENT</div></section>
+  <section class="login-panel"><div class="mobile-brand"><span class="brand-mark">S</span><strong>SmartBiz AI</strong></div><div class="login-card"><div class="login-heading"><span class="login-icon">↗</span><p class="eyebrow">مرحبًا بعودتك</p><h2>تسجيل الدخول</h2><p>أدخل بيانات حسابك للوصول إلى لوحة الإدارة.</p></div><form method="post" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>اسم المستخدم<input type="text" name="username" autocomplete="username" placeholder="اكتب اسم المستخدم" required autofocus></label><label>كلمة المرور<input type="password" name="password" autocomplete="current-password" placeholder="اكتب كلمة المرور" required></label><button class="btn btn-primary btn-full" type="submit">دخول إلى النظام <span>←</span></button></form><div class="secure-note"><span>◆</span> دخول محمي إلى بيانات شركتك</div></div><div class="login-bottom">لوحة إدارة خاصة بشركتك <span>·</span> SmartBiz AI</div></section>
+</div>
+{% endblock %}

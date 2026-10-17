@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}الموردون | SmartBiz AI{% endblock %}
+{% block page_heading %}إدارة الموردين{% endblock %}
+{% block breadcrumb %}الموردون{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>قاعدة بيانات الموردين</h2><p>احفظ بيانات الموردين واستخدمها عند تسجيل فواتير شراء جديدة.</p></div><a class="btn btn-primary" href="{{ url_for('supplier_new') }}">＋ إضافة مورد</a></div>
+<div class="panel"><div class="table-toolbar"><form class="search-form" method="get"><input type="search" name="q" value="{{ search }}" placeholder="ابحث باسم المورد أو الهاتف أو البريد الإلكتروني"><button class="btn btn-outline" type="submit">بحث</button>{% if search %}<a class="clear-search" href="{{ url_for('suppliers') }}">مسح</a>{% endif %}</form><span class="muted">عدد الموردين: {{ suppliers|length }}</span></div>
+{% if suppliers %}<div class="table-wrap"><table><thead><tr><th>المورد</th><th>الهاتف</th><th>البريد الإلكتروني</th><th>فواتير الشراء</th><th>إجمالي المشتريات</th><th>الإجراءات</th></tr></thead><tbody>{% for s in suppliers %}<tr><td><strong>{{ s.name }}</strong>{% if s.address %}<small class="table-sub">{{ s.address }}</small>{% endif %}</td><td>{{ s.phone or '—' }}</td><td>{{ s.email or '—' }}</td><td>{{ s.purchases_count }}</td><td class="strong-cell">{{ s.total_purchased|money }}</td><td><a class="action-link" href="{{ url_for('supplier_edit', supplier_id=s.id) }}">تعديل</a></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><span>♧</span><h4>لا يوجد موردون مسجلون</h4><p>أضف موردًا لربطه بفاتورة الشراء القادمة.</p><a class="btn btn-primary" href="{{ url_for('supplier_new') }}">إضافة أول مورد</a></div>{% endif %}</div>
+{% endblock %}

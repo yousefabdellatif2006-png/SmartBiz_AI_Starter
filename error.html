@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block title %}خطأ {{ code }} | SmartBiz AI{% endblock %}
+{% block page_heading %}حدث خطأ{% endblock %}
+{% block content %}<section class="panel empty-state"><span>{{ code }}</span><h3>{{ message }}</h3><a class="btn btn-primary" href="{{ url_for('dashboard') }}">العودة إلى لوحة التحكم</a></section>{% endblock %}

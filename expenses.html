@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}المصروفات | SmartBiz AI{% endblock %}
+
+{% block page_heading %}مصروفات الشركة{% endblock %}
+
+{% block breadcrumb %}المصروفات{% endblock %}
+
+{% block content %}
+
+<div class="welcome-row"><div><h2>تسجيل ومتابعة المصروفات</h2><p>سجل مصروفات التشغيل حتى تظهر في التقارير المالية.</p></div></div>
+
+<div class="content-grid expense-grid"><section class="panel"><div class="panel-heading simple"><div><h3>إضافة مصروف</h3><p>أدخل بيانات المصروف ثم احفظه</p></div></div><form method="post" class="form-stack expense-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>اسم المصروف <b>*</b><input name="title" required maxlength="180" placeholder="مثال: فاتورة كهرباء"></label><label>الفئة<select name="category"><option>إيجار</option><option>رواتب</option><option>نقل وشحن</option><option>كهرباء ومياه</option><option>صيانة</option><option>تسويق</option><option>عام</option></select></label><label>القيمة بالجنيه <b>*</b><input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label><label>تاريخ المصروف <b>*</b><input name="expense_date" type="date" value="{{ today }}" required></label><label>ملاحظات<textarea name="notes" rows="3" placeholder="تفاصيل إضافية اختيارية"></textarea></label><button class="btn btn-primary btn-full" type="submit">حفظ المصروف ←</button></form></section><section class="panel"><div class="panel-heading"><div><h3>سجل المصروفات</h3><p>آخر 200 مصروف مسجل</p></div><span class="chip">{{ expenses|length }} سجل</span></div>{% if expenses %}<div class="table-wrap"><table><thead><tr><th>المصروف</th><th>الفئة</th><th>التاريخ</th><th>القيمة</th></tr></thead><tbody>{% for e in expenses %}<tr><td><strong>{{ e.title }}</strong>{% if e.notes %}<small class="table-sub">{{ e.notes }}</small>{% endif %}</td><td>{{ e.category }}</td><td>{{ e.expense_date|date_ar }}</td><td class="strong-cell">{{ e.amount|money }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state compact"><span>◈</span><h4>لا توجد مصروفات</h4><p>أي مصروف جديد هتسجله هيظهر هنا.</p></div>{% endif %}</section></div>
+
+{% endblock %}
+
+<!-- في رأس الجدول أضف عمود الإجراءات -->
+
+<th>الإجراءات</th>
+
+
+
+<!-- داخل حلقة عرض المصروفات (for loop) أضف زر الحذف -->
+
+<!-- في رأس جدول المصروفات (thead) أضف هذا السطر -->
+
+<tr>
+
+  <th>المصروف</th>
+
+  <th>الفئة</th>
+
+  <th>التاريخ</th>
+
+  <th>القيمة</th>
+
+  <th>الإجراءات</th> <!-- عمود جديد -->
+
+</tr>
+
+
+
+<!-- داخل حلقة عرض المصروفات (for expense in expenses) أضف هذا العمود بجانب البيانات -->
+
+<tr>
+
+  <td>{{ expense.title }}</td>
+
+  <td>{{ expense.category }}</td>
+
+  <td>{{ expense.expense_date }}</td>
+
+  <td>{{ expense.amount | money }}</td>
+
+ 
+
+  <!-- زر الحذف -->
+
+  <td>
+
+    <form action="{{ url_for('expense_delete', expense_id=expense.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('هل أنت متأكد من حذف هذا المصروف؟');">
+
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer;">حذف</button>
+
+    </form>
+
+  </td>
+
+</tr> ايه كده 

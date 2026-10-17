@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}المبيعات والفواتير | SmartBiz AI{% endblock %}
+{% block page_heading %}المبيعات والفواتير{% endblock %}
+{% block breadcrumb %}المبيعات{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>سجل المبيعات</h2><p>راجع الفواتير المسجلة وحالة كل عملية بيع.</p></div><a class="btn btn-primary" href="{{ url_for('sale_new') }}">＋ فاتورة بيع جديدة</a></div>
+<div class="panel">{% if sales %}<div class="table-wrap"><table><thead><tr><th>رقم الفاتورة</th><th>العميل</th><th>التاريخ</th><th>الإجمالي</th><th>الربح قبل المصروفات</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>{% for s in sales %}<tr><td><span class="invoice-ref">{{ s.sale_number }}</span></td><td>{{ s.customer }}</td><td>{{ s.created_at|date_ar }}</td><td class="strong-cell">{{ s.total_amount|money }}</td><td>{{ s.profit_amount|money }}</td><td><span class="status-pill {{ s.status }}">{{ 'مكتملة' if s.status == 'completed' else 'ملغاة' }}</span></td><td>{% if s.status == 'completed' %}<form method="post" action="{{ url_for('sale_cancel', sale_id=s.id) }}" onsubmit="return confirm('سيتم إلغاء الفاتورة وإرجاع الكمية إلى المخزون. هل تريد المتابعة؟');"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="action-link danger-text" type="submit">إلغاء الفاتورة</button></form>{% else %}<span class="muted">لا يوجد</span>{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><span>↗</span><h4>لا توجد مبيعات مسجلة</h4><p>أنشئ أول فاتورة بيع لتبدأ متابعة المبيعات والمخزون.</p><a class="btn btn-primary" href="{{ url_for('sale_new') }}">إنشاء فاتورة بيع</a></div>{% endif %}</div>
+{% endblock %}

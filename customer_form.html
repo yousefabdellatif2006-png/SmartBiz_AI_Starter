@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}{{ page_title }} | SmartBiz AI{% endblock %}
+{% block page_heading %}{{ page_title }}{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('customers') }}">العملاء</a> / {{ page_title }}{% endblock %}
+{% block content %}
+<div class="form-page-heading"><a class="back-link" href="{{ url_for('customers') }}">→ الرجوع إلى العملاء</a><p>بيانات العميل المسجلة تُستخدم في فواتير البيع وسجل المشتريات.</p></div>
+<form method="post" class="panel form-panel"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><div class="form-grid">
+<label>اسم العميل <b>*</b><input name="name" maxlength="180" required value="{{ form.get('name','') }}" placeholder="اسم العميل أو الشركة"></label>
+<label>رقم الهاتف<input name="phone" maxlength="40" value="{{ form.get('phone') or '' }}" placeholder="01xxxxxxxxx"></label>
+<label>البريد الإلكتروني<input name="email" type="email" maxlength="180" value="{{ form.get('email') or '' }}" placeholder="name@example.com"></label>
+<label>العنوان<input name="address" maxlength="255" value="{{ form.get('address') or '' }}" placeholder="المدينة أو العنوان"></label>
+<label class="form-span-2">ملاحظات<textarea name="notes" rows="4" placeholder="ملاحظات اختيارية">{{ form.get('notes') or '' }}</textarea></label>
+</div><div class="form-actions"><a class="btn btn-outline" href="{{ url_for('customers') }}">إلغاء</a><button class="btn btn-primary" type="submit">حفظ بيانات العميل ←</button></div></form>
+{% endblock %}
