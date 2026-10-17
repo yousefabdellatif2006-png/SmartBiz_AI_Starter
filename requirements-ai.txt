@@ -1,12 +1,10 @@
-pandas>=2.2,<4.0
-scikit-learn>=1.4,<2.0
 streamlit
-pandas
+pandas>=2.2,<4.0
 numpy
 plotly
 matplotlib
 reportlab
-scikit-learn
+scikit-learn>=1.4,<2.0
 openpyxl
 python-calamine
 xlrd
