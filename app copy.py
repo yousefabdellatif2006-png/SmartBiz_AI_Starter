@@ -973,27 +973,4 @@ def expense_delete(expense_id):
         cursor.close()
         conn.close()
     return redirect(url_for("expenses"))
-@app.route("/expenses/<int:expense_id>/delete", methods=["POST"])
-@login_required
-def expense_delete(expense_id):
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    try:
-        cursor.execute("SELECT id, title FROM expenses WHERE id=%s", (expense_id,))
-        expense = cursor.fetchone()
-        if not expense:
-            flash("المصروف غير موجود.", "error")
-            return redirect(url_for("expenses"))
-        
-        cursor.execute("DELETE FROM expenses WHERE id=%s", (expense_id,))
-        write_audit(cursor, "حذف مصروف", "expense", expense_id, expense["title"])
-        conn.commit()
-        flash("تم حذف المصروف بنجاح.", "success")
-    except mysql.connector.Error:
-        conn.rollback()
-        app.logger.exception("Database error while deleting expense")
-        flash("تعذر حذف المصروف.", "error")
-    finally:
-        cursor.close()
-        conn.close()
-    return redirect(url_for("expenses"))
+
