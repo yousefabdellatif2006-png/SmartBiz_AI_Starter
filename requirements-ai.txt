@@ -1,2 +1,13 @@
 pandas>=2.2,<4.0
 scikit-learn>=1.4,<2.0
+streamlit
+pandas
+numpy
+plotly
+matplotlib
+reportlab
+scikit-learn
+openpyxl
+python-calamine
+xlrd
+pyarrow
