@@ -6,11 +6,5 @@ streamlit
 pandas>=2.2,<4.0
 numpy
 plotly
-matplotlib>=3.8,<4.0
-reportlab>=4.0,<5.0
-scikit-learn>=1.4,<2.0
-openpyxl
-python-calamine
-xlrd
-pyarrow
+
 
